@@ -1,0 +1,27 @@
+table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+
+}
+
+th, td {
+  border: 1px solid #000000;
+  padding: 5px;
+  text-align: center;
+}
+
+.x {
+  width: 200px;
+  word-break: break-all;
+}
+
+.y {
+  width: 200px;
+  word-break: break-all;
+}
+
+.r {
+  width: 200px;
+  word-break: break-all;
+}
