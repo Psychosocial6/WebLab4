@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {LoginForm} from "../login-form/login-form";
+import {LoginForm} from "./components/login-form/login-form";
 
 @Component({
   selector: 'app-login-page',
@@ -10,5 +10,4 @@ import {LoginForm} from "../login-form/login-form";
   styleUrl: './login-page.css',
 })
 export class LoginPage {
-
 }

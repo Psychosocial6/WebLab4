@@ -1,0 +1,23 @@
+<div class="block">
+
+  <fieldset>
+    <legend>Изменение X</legend>
+    <input type="text" id="xText" name="xText" placeholder="Значение X (от -5 до 5)" [(ngModel)]="formData.xText"/>
+  </fieldset>
+
+  <fieldset>
+    <legend>Изменение Y</legend>
+    <input type="text" id="yText" name="yText" placeholder="Значение Y (от -3 до 3)" [(ngModel)]="formData.yText"/>
+  </fieldset>
+
+  <fieldset>
+    <legend>Изменение R</legend>
+    <input type="text" id="rText" name="rText" placeholder="Значение R (от -5 до 5)" [(ngModel)]="formData.rText"/>
+  </fieldset>
+
+  <div class="button-panel">
+    <button name="submit" (click)="onSubmit" id="button" disabled>Проверить</button>
+    <button name="clear" id="clear">Очистить таблицу</button>
+  </div>
+
+</div>

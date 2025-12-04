@@ -7,9 +7,13 @@ svg {
 
 .block {
   flex: 1;
-  padding: 25px;
+  padding: 15px;
   background-color: #FFFFFF;
   border-radius: 30px;
   border: 1px solid #e2e8f0;
   height: 100%;
+}
+
+:host {
+  flex: 1;
 }

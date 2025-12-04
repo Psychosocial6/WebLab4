@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import {PointForm} from '../point-form/point-form';
-import {Graph} from '../graph/graph';
-import {Table} from '../table/table';
+import {PointForm} from './components/point-form/point-form';
+import {Graph} from './components/graph/graph';
+import {Table} from './components/table/table';
 
 @Component({
   selector: 'app-main-page',

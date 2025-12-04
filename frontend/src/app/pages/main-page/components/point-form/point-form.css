@@ -3,7 +3,7 @@
   flex-direction: column;
   gap: 30px;
   flex: 1;
-  padding: 25px;
+  padding: 15px;
   background-color: #FFFFFF;
   border-radius: 30px;
   border: 1px solid #e2e8f0;
@@ -39,5 +39,9 @@ button:disabled {
 }
 
 #clear {
+  flex: 1;
+}
+
+:host {
   flex: 1;
 }
