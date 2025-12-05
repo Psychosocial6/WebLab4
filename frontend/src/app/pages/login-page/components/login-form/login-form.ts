@@ -25,6 +25,7 @@ export class LoginForm {
     this.http.post<any>("http://localhost:8080/backend/app/auth/login", this.formData)
       .subscribe({
         next: (response) => {
+          console.log(response.message)
           this.router.navigate(['/main'])
         },
 

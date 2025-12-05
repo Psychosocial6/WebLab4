@@ -2,7 +2,7 @@ package controllers;
 
 import data.ResponseMessageDTO;
 import data.UserDTO;
-import jakarta.inject.Inject;
+import jakarta.ejb.EJB;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
@@ -14,7 +14,7 @@ import services.UserService;
 @Consumes(MediaType.APPLICATION_JSON)
 public class UserController {
 
-    @Inject
+    @EJB
     UserService userService;
 
     @POST

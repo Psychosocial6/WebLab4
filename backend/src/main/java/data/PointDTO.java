@@ -1,34 +1,34 @@
 package data;
 
 public class PointDTO {
-    private String xText;
-    private String yText;
-    private String rText;
+    private String x;
+    private String y;
+    private String r;
 
     public PointDTO() {
     }
 
-    public String getxText() {
-        return xText;
+    public String getX() {
+        return x;
     }
 
-    public void setxText(String xText) {
-        this.xText = xText;
+    public void setX(String x) {
+        this.x = x;
     }
 
-    public String getyText() {
-        return yText;
+    public String getY() {
+        return y;
     }
 
-    public void setyText(String yText) {
-        this.yText = yText;
+    public void setY(String y) {
+        this.y = y;
     }
 
-    public String getrText() {
-        return rText;
+    public String getR() {
+        return r;
     }
 
-    public void setrText(String rText) {
-        this.rText = rText;
+    public void setR(String r) {
+        this.r = r;
     }
 }
