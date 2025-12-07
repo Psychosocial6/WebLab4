@@ -3,21 +3,20 @@ package controllers;
 import data.PointDTO;
 import exceptions.ValidationException;
 import jakarta.ejb.EJB;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
+import services.DatabaseManager;
 import services.PointCheckingService;
 
 import java.math.BigDecimal;
 
 @Path("/main")
-@Produces(MediaType.APPLICATION_JSON)
 public class PointController {
 
     @EJB
     PointCheckingService pointCheckingService;
+    @EJB
+    DatabaseManager databaseManager;
 
     @POST
     @Path("/check")
@@ -31,5 +30,18 @@ public class PointController {
         catch (ValidationException e) {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
+    }
+
+    @DELETE
+    @Path("/delete")
+    public Response clearHistory() {
+        databaseManager.clearResults();
+        return Response.ok().build();
+    }
+
+    @GET
+    @Path("/load")
+    public Response loadHistory() {
+        return Response.ok(databaseManager.getResults()).build();
     }
 }

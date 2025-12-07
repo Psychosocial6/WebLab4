@@ -1,7 +1,7 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import {Component, OnInit, OnDestroy, ChangeDetectorRef} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
-import {PointService} from '../../../../services/point.service';
+import { PointService } from '../../../../services/point.service';
 
 @Component({
   selector: 'app-table',
@@ -11,32 +11,46 @@ import {PointService} from '../../../../services/point.service';
 })
 export class Table implements OnInit, OnDestroy {
   rows: any[] = [];
-  private subscription!: Subscription;
+  private pointAddedSub!: Subscription;
+  private pointsClearedSub!: Subscription;
 
-  constructor(private pointService: PointService) {}
+  constructor(private pointService: PointService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit() {
-    this.subscription = this.pointService.pointAdded$.subscribe((newPoint) => {
-      this.addRow(newPoint);
+    this.pointService.loadHistory().subscribe(data => {
+      this.rows = data.map((item, index) => ({
+        id: index + 1,
+        x: item.x,
+        y: item.y,
+        r: item.r,
+        result: item.result ? 'Попадание' : 'Промах',
+        requestTime: item.requestTime,
+        localTime: new Date(item.requestTime).toLocaleTimeString()
+      }));
+      this.cdr.detectChanges();
+    });
+
+    this.pointAddedSub = this.pointService.pointAdded$.subscribe(newPoint => {
+      this.rows.push({
+        id: this.rows.length + 1,
+        x: newPoint.x,
+        y: newPoint.y,
+        r: newPoint.r,
+        result: newPoint.result ? 'Попадание' : 'Промах',
+        requestTime: newPoint.requestTime,
+        localTime: new Date().toLocaleTimeString()
+      });
+      this.cdr.detectChanges();
+    });
+
+    this.pointsClearedSub = this.pointService.pointsCleared$.subscribe(() => {
+      this.rows = [];
+      this.cdr.detectChanges();
     });
   }
 
-  addRow(data: any) {
-    const newRow = {
-      id: this.rows.length + 1,
-      x: data.x,
-      y: data.y,
-      r: data.r,
-      result: data.result ? 'Попадание' : 'Промах',
-      requestTime: data.requestTime,
-      localTime: new Date().toLocaleTimeString()
-    };
-    this.rows.push(newRow);
-  }
-
   ngOnDestroy() {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
+    if (this.pointAddedSub) this.pointAddedSub.unsubscribe();
+    if (this.pointsClearedSub) this.pointsClearedSub.unsubscribe();
   }
 }

@@ -15,9 +15,13 @@
     <input type="text" id="rText" name="rText" placeholder="Значение R (от -5 до 5)" [(ngModel)]="formData.rText"/>
   </fieldset>
 
+  <div *ngIf="message" class="error-text">
+    <small>{{ message }}</small>
+  </div>
+
   <div class="button-panel">
     <button name="submit" (click)="onSubmit()" id="button">Проверить</button>
-    <button name="clear" id="clear">Очистить таблицу</button>
+    <button name="clear" (click)="onDelete()" id="clear">Очистить таблицу</button>
   </div>
 
 </div>
