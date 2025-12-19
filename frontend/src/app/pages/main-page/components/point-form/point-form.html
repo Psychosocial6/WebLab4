@@ -12,16 +12,18 @@
 
   <fieldset>
     <legend>Изменение R</legend>
-    <input type="text" id="rText" name="rText" placeholder="Значение R (от -5 до 5)" [(ngModel)]="formData.rText"/>
+    <input type="text" id="rText" name="rText" placeholder="Значение R (от -5 до 5 (<0 = бан))" [(ngModel)]="formData.rText" (input)="onRChange($event)"/>
   </fieldset>
 
   <div *ngIf="message" class="error-text">
-    <small>{{ message }}</small>
+    <p>{{ message }}</p>
   </div>
 
   <div class="button-panel">
     <button name="submit" (click)="onSubmit()" id="button">Проверить</button>
     <button name="clear" (click)="onDelete()" id="clear">Очистить таблицу</button>
   </div>
+
+  <button name="logout" (click)="onLogout()" id="logout">Завершить сессию</button>
 
 </div>

@@ -13,6 +13,7 @@ import services.UserService;
 
 @Path("/auth")
 @Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
 public class UserController {
 
     @EJB
@@ -25,7 +26,7 @@ public class UserController {
         if (check) {
             return Response.ok(new ResponseMessageDTO("Вход выполнен успешно")).build();
         }
-        return Response.status(Response.Status.UNAUTHORIZED).entity("Ошибка входа").build();
+        return Response.status(Response.Status.UNAUTHORIZED).entity(new ResponseMessageDTO("Ошибка входа")).build();
     }
 
     @POST

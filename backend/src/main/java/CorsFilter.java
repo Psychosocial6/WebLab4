@@ -20,16 +20,9 @@ public class CorsFilter implements ContainerRequestFilter, ContainerResponseFilt
 
     @Override
     public void filter(ContainerRequestContext request, ContainerResponseContext response) throws IOException {
-        if (request.getRequest().getMethod().equalsIgnoreCase("OPTIONS")) {
-            response.getHeaders().add("Access-Control-Allow-Origin", "http://localhost:4200");
-            response.getHeaders().add("Access-Control-Allow-Headers", "origin, content-type, accept, authorization");
-            response.getHeaders().add("Access-Control-Allow-Credentials", "true");
-            response.getHeaders().add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD");
-        } else {
-            response.getHeaders().add("Access-Control-Allow-Origin", "http://localhost:4200");
-            response.getHeaders().add("Access-Control-Allow-Headers", "origin, content-type, accept, authorization");
-            response.getHeaders().add("Access-Control-Allow-Credentials", "true");
-            response.getHeaders().add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD");
-        }
+        response.getHeaders().add("Access-Control-Allow-Origin", "http://localhost:4200");
+        response.getHeaders().add("Access-Control-Allow-Headers", "origin, content-type, accept, authorization");
+        response.getHeaders().add("Access-Control-Allow-Credentials", "true");
+        response.getHeaders().add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD");
     }
 }
