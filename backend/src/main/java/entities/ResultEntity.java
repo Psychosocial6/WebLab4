@@ -1,7 +1,7 @@
 package entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -24,18 +24,22 @@ public class ResultEntity {
     @Column(name = "request_time", nullable = false)
     private double requestTime;
     @Column(name = "local_time", nullable = false)
+    @JsonFormat(pattern = "HH:mm:ss dd-MM-yyyy")
     private LocalDateTime localTime;
+    @Column(name = "user_login", nullable = false)
+    private String userLogin;
 
     public ResultEntity() {
     }
 
-    public ResultEntity(BigDecimal x, BigDecimal y, BigDecimal r, boolean result, double requestTime, LocalDateTime localTime) {
+    public ResultEntity(BigDecimal x, BigDecimal y, BigDecimal r, boolean result, double requestTime, LocalDateTime localTime, String userLogin) {
         this.x = x;
         this.y = y;
         this.r = r;
         this.result = result;
         this.requestTime = requestTime;
         this.localTime = localTime;
+        this.userLogin = userLogin;
     }
 
     public int getId() {
@@ -92,5 +96,13 @@ public class ResultEntity {
 
     public void setLocalTime(LocalDateTime localTime) {
         this.localTime = localTime;
+    }
+
+    public String getUserLogin() {
+        return userLogin;
+    }
+
+    public void setUserLogin(String userLogin) {
+        this.userLogin = userLogin;
     }
 }

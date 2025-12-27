@@ -12,10 +12,10 @@
 
   <fieldset>
     <legend>Изменение R</legend>
-    <input type="text" id="rText" name="rText" placeholder="Значение R (от -5 до 5 (<0 = бан))" [(ngModel)]="formData.rText" (input)="onRChange($event)"/>
+    <input type="text" id="rText" name="rText" placeholder="Значение R (от -5 до 5)" [(ngModel)]="formData.rText" (input)="onRChange($event)"/>
   </fieldset>
 
-  <div *ngIf="message" class="error-text">
+  <div *ngIf="message" class="message-text">
     <p>{{ message }}</p>
   </div>
 

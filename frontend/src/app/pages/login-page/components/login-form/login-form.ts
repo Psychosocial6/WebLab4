@@ -1,9 +1,8 @@
 import { Component, ChangeDetectorRef  } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
-import {NgIf} from '@angular/common';
-import {AuthService} from '../../../../services/auth.service';
+import { Router, ActivatedRoute } from '@angular/router';
+import { NgIf } from '@angular/common';
+import { AuthService } from '../../../../services/auth.service';
 
 @Component({
   selector: 'app-login-form',
@@ -13,45 +12,77 @@ import {AuthService} from '../../../../services/auth.service';
 })
 export class LoginForm {
   message = '';
+  isLoading = false;
   formData = {
     login: '',
     password: ''
   };
+  returnUrl: string;
 
-  constructor(private http: HttpClient, private router: Router, private cdr: ChangeDetectorRef, private authService: AuthService) {
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private cdr: ChangeDetectorRef,
+    private authService: AuthService
+  ) {
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/main';
   }
 
   onLogin() {
     this.message = '';
-    this.http.post<any>("http://localhost:8080/backend/app/auth/login", this.formData)
+    this.isLoading = true;
+
+    if (!this.formData.login.trim() || !this.formData.password.trim()) {
+      this.message = 'Логин и пароль не могут быть пустыми';
+      this.isLoading = false;
+      this.cdr.detectChanges();
+      return;
+    }
+
+    this.authService.login(this.formData.login, this.formData.password)
       .subscribe({
         next: (response) => {
-          console.log(response.message)
-          this.authService.setLoggedIn();
-          this.router.navigate(['/main'])
+          console.log('Успешный вход:', response.message);
+          this.router.navigate([this.returnUrl]);
+          this.isLoading = false;
         },
-
         error: (error) => {
-          console.log("Error")
-          this.message = error.error.message;
+          console.error('Ошибка входа:', error);
+          this.message = error.error?.message || error.error?.error || 'Ошибка входа';
+          this.isLoading = false;
           this.cdr.detectChanges();
         }
-      })
+      });
   }
 
   onRegister() {
-    this.http.post<any>("http://localhost:8080/backend/app/auth/register", this.formData)
+    this.message = '';
+    this.isLoading = true;
+
+    if (!this.formData.login.trim() || !this.formData.password.trim()) {
+      this.message = 'Логин и пароль не могут быть пустыми';
+      this.isLoading = false;
+      this.cdr.detectChanges();
+      return;
+    }
+
+    this.authService.register(this.formData.login, this.formData.password)
       .subscribe({
         next: (response) => {
           this.message = response.message;
+          this.authService.login(this.formData.login, this.formData.password)
+            .subscribe(() => {
+              this.router.navigate(['/main']);
+            });
+          this.isLoading = false;
           this.cdr.detectChanges();
         },
-
         error: (error) => {
-          console.log("Error")
-          this.message = error.error.message;
+          console.error('Ошибка регистрации:', error);
+          this.message = error.error?.message || error.error?.error || 'Ошибка регистрации';
+          this.isLoading = false;
           this.cdr.detectChanges();
         }
-      })
+      });
   }
 }

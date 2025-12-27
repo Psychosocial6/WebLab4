@@ -5,7 +5,6 @@ import entities.ResultEntity;
 import exceptions.ValidationException;
 import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;
-import jakarta.inject.Inject;
 import utils.AreaChecker;
 import utils.Validator;
 
@@ -17,15 +16,16 @@ public class PointCheckingService {
     @EJB
     DatabaseManager databaseManager;
 
-    public Result checkPoint(BigDecimal x, BigDecimal y, BigDecimal r) throws ValidationException {
+    public Result checkPoint(BigDecimal x, BigDecimal y, BigDecimal r, String userLogin)
+            throws ValidationException {
         long startTime = System.nanoTime();
         if (Validator.validate(x, y, r)) {
             boolean result = AreaChecker.check(x, y, r);
             LocalDateTime localTime = LocalDateTime.now();
             double requestTime = Math.round(((double) (System.nanoTime() - startTime) / 1e6) * 1e6) / 1e6;
+            ResultEntity resultEntity = new ResultEntity(x, y, r, result, requestTime, localTime, userLogin);
+            databaseManager.saveResult(resultEntity, userLogin);
 
-            ResultEntity resultEntity = new ResultEntity(x, y, r, result, requestTime, localTime);
-            databaseManager.saveResult(resultEntity);
             return new Result(x, y, r, result, requestTime, localTime);
         }
         throw new ValidationException("Invalid point");

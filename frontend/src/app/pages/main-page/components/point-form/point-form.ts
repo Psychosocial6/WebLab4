@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component} from '@angular/core';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import {PointService} from '../../../../services/point.service';
@@ -6,6 +6,8 @@ import {NgIf} from '@angular/common';
 import {RService} from '../../../../services/r.service';
 import {AuthService} from '../../../../services/auth.service';
 import {Router} from '@angular/router';
+import { MessageService } from '../../../../services/message.service'; // Добавьте импорт
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-point-form',
@@ -13,7 +15,7 @@ import {Router} from '@angular/router';
   templateUrl: './point-form.html',
   styleUrl: './point-form.css',
 })
-export class PointForm {
+export class PointForm implements OnInit, OnDestroy {
   message = '';
   formData = {
     xText: '',
@@ -21,7 +23,28 @@ export class PointForm {
     rText: ''
   };
 
-  constructor(private http: HttpClient, private pointService: PointService, private cdr: ChangeDetectorRef, private rService: RService, private authService: AuthService, private router: Router) {}
+  private messageSubscription: Subscription = new Subscription();
+
+  constructor(private http: HttpClient, private pointService: PointService, private cdr: ChangeDetectorRef, private rService: RService, private authService: AuthService, private router: Router, private messageService: MessageService) {}
+
+  ngOnInit() {
+    this.messageSubscription = this.messageService.currentMessage.subscribe(
+      message => {
+        this.message = message;
+        this.cdr.detectChanges();
+        setTimeout(() => {
+          this.message = '';
+          this.cdr.detectChanges();
+        }, 3000);
+      }
+    );
+  }
+
+  ngOnDestroy() {
+    if (this.messageSubscription) {
+      this.messageSubscription.unsubscribe();
+    }
+  }
 
   onSubmit() {
     const requestBody = {
@@ -46,13 +69,21 @@ export class PointForm {
       .subscribe({
         next: (response) => {
           this.pointService.addPoint(response);
-          this.message = '';
+          this.message = 'Точка успешно добавлена';
           this.cdr.detectChanges();
+          setTimeout(() => {
+            this.message = '';
+            this.cdr.detectChanges();
+          }, 3000);
         },
         error: (err) => {
           console.error(err)
           this.message = 'Валидация не пройдена'
           this.cdr.detectChanges();
+          setTimeout(() => {
+            this.message = '';
+            this.cdr.detectChanges();
+          }, 3000);
         }
       });
   }
@@ -64,13 +95,21 @@ export class PointForm {
       next: (response) => {
           this.pointService.clearPoints();
           console.log('Таблица очищена');
+          this.message = 'Таблица успешно очищена';
+          this.cdr.detectChanges();
+        setTimeout(() => {
           this.message = '';
-        this.cdr.detectChanges();
+          this.cdr.detectChanges();
+        }, 3000);
       },
       error: (err) => {
         console.error('Ошибка очистки:', err);
         this.message = 'Ошибка очистки';
         this.cdr.detectChanges();
+        setTimeout(() => {
+          this.message = '';
+          this.cdr.detectChanges();
+        }, 3000);
       }
     });
   }

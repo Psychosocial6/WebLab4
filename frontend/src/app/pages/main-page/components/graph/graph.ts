@@ -3,6 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {PointService} from '../../../../services/point.service';
 import {RService} from '../../../../services/r.service';
 import {CommonModule} from '@angular/common';
+import {MessageService} from '../../../../services/message.service';
 
 @Component({
   selector: 'app-graph',
@@ -13,7 +14,7 @@ import {CommonModule} from '@angular/common';
 export class Graph implements OnInit {
   rValue = 1;
   points: any[] = [];
-  constructor(private http: HttpClient, private pointService: PointService, private cdr: ChangeDetectorRef, private rService: RService) {
+  constructor(private http: HttpClient, private pointService: PointService, private cdr: ChangeDetectorRef, private rService: RService, private messageService: MessageService) {
   }
 
   ngOnInit() {
@@ -71,16 +72,18 @@ export class Graph implements OnInit {
     const requestBody = {
       x: mathX,
       y: mathY,
-      r: this.rValue,
+      r: this.rValue
     };
 
     this.http.post<any>("http://localhost:8080/backend/app/main/check", requestBody)
       .subscribe({
         next: (response) => {
           this.pointService.addPoint(response);
+          this.messageService.changeMessage("Точка успешно добавлена");
         },
         error: (err) => {
           console.error(err);
+          this.messageService.changeMessage("Ошибка при добавлении точки");
         }
       });
   }

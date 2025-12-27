@@ -46,6 +46,6 @@ button:disabled {
   flex: 1;
 }
 
-.error-text {
+.message-text {
   color: red;
 }

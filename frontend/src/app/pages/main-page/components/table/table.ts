@@ -25,7 +25,7 @@ export class Table implements OnInit, OnDestroy {
         r: item.r,
         result: item.result ? 'Попадание' : 'Промах',
         requestTime: item.requestTime,
-        localTime: new Date(item.requestTime).toLocaleTimeString()
+        localTime: item.localTime
       }));
       this.cdr.detectChanges();
     });
@@ -38,7 +38,7 @@ export class Table implements OnInit, OnDestroy {
         r: newPoint.r,
         result: newPoint.result ? 'Попадание' : 'Промах',
         requestTime: newPoint.requestTime,
-        localTime: new Date().toLocaleTimeString()
+        localTime: newPoint.localTime
       });
       this.cdr.detectChanges();
     });
